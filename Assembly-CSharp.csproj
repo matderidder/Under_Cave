@@ -58,7 +58,9 @@
     <Analyzer Include="D:\Unity\Unity Gamer\2022.3.9f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\WeaponController.cs" />
     <Compile Include="Assets\Scripts\Character Move.cs" />
+    <Compile Include="Assets\Scripts\ItemController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
