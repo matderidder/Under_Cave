@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class CharacterController : MonoBehaviour
+public class CharacterOptions : MonoBehaviour
 {
 
     public float Speed;
@@ -12,7 +13,7 @@ public class CharacterController : MonoBehaviour
     public float fallSpeed;
     public bool isGrounded;
     public Rigidbody rigid;
-    public float raycastDown = 0.5f;
+    public float raycastDown;
     public Camera main;
     public GameObject target;
     public bool isblock;
@@ -26,27 +27,28 @@ public class CharacterController : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         main = Camera.main;
+        raycastDown = GetComponent<Collider>().bounds.extents.y;
     }
 
     // Update is called once per frame
     void Update()
     {
         //movement with arrows or wasd, get axis and move ridged body
-        float horiMove = Input.GetAxis("Horizontal");
-        float vertMove = Input.GetAxis("Vertical");
-        Vector3 move = new Vector3 (horiMove, 0 ,vertMove);
+        float horiMove = Input.GetAxis("Vertical");
+        float vertMove = Input.GetAxis("Horizontal");
+        Vector3 move = new Vector3 (-horiMove, 0 ,vertMove);
         move.Normalize();
         transform.Translate (move*Speed*Time.deltaTime);
 
         //turn camera with player mouse
         float yTurn = Input.GetAxis ("Mouse X") * turnSpeed;
-        transform.eulerAngles = (new Vector3 (0,transform.eulerAngles.y + yTurn,0));
+        transform.eulerAngles = (new Vector3 (transform.eulerAngles.x, transform.eulerAngles.y + yTurn, transform.eulerAngles.z));
         float xTurn = Input.GetAxis("Mouse Y") * turnSpeed;
         Mathf.Clamp(xTurn, -15f, 15f);
-        target.transform.localEulerAngles = (new Vector3(target.transform.eulerAngles.x + -xTurn, 0, 0));
+        target.transform.localEulerAngles = (new Vector3(target.transform.eulerAngles.x + -xTurn, target.transform.localEulerAngles.y, target.transform.localEulerAngles.z));
+
         //Ground check
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, raycastDown))
+        if (Physics.Raycast(transform.position, -Vector3.up, raycastDown + 0.1f))
             isGrounded = true;
         else
             isGrounded = false;
@@ -78,4 +80,11 @@ public class CharacterController : MonoBehaviour
         
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Finish"))
+        {
+            SceneManager.LoadScene("Maze");
+        }
+    }
 }
