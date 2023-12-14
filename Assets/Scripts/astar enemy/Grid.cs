@@ -15,12 +15,13 @@ public class Grid : MonoBehaviour {
 	float nodeDiameter;
 	int gridSizeX, gridSizeY;
 
-	void Start() {
+	void Awake() {
 		//set the grid values and initlize
 		nodeDiameter = nodeRadius*2;
 		gridSizeX = Mathf.RoundToInt(gridWorldSize.x/nodeDiameter);
 		gridSizeY = Mathf.RoundToInt(gridWorldSize.y/nodeDiameter);
 		CreateGrid();
+		displayGizmos = true;
 	}
 
 	//should not go past
@@ -40,7 +41,7 @@ public class Grid : MonoBehaviour {
 			for (int y = 0; y < gridSizeY; y ++) {
 				Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
 				bool walkable = !(Physics.CheckSphere(worldPoint,nodeRadius,unwalkableMask));
-				grid[x,y] = new Node(walkable,worldPoint, x,y);
+				grid[x,y] = new Node(walkable, worldPoint, x,y);
 			}
 		}
 	}
