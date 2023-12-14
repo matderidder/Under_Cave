@@ -19,6 +19,7 @@ public class CharacterOptions : MonoBehaviour
     public bool isblock;
     public bool isattack;
     public GameObject weapon;
+    private Animator animator;
 
     // Start is called before the first frame update
     void Start()
@@ -27,18 +28,30 @@ public class CharacterOptions : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         main = Camera.main;
+        animator = GetComponent<Animator>();
         raycastDown = GetComponent<Collider>().bounds.extents.y;
     }
 
     // Update is called once per frame
     void Update()
     {
+
         //movement with arrows or wasd, get axis and move ridged body
         float horiMove = Input.GetAxis("Vertical");
         float vertMove = Input.GetAxis("Horizontal");
         Vector3 move = new Vector3 (-horiMove, 0 ,vertMove);
         move.Normalize();
         transform.Translate (move*Speed*Time.deltaTime);
+        if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A))
+        {
+            this.GetComponent<Animator>().SetTrigger("Run");
+        }
+        else
+        {
+            this.GetComponent<Animator>().SetTrigger("Idle");
+        }
+        
+
 
         //turn camera with player mouse
         float yTurn = Input.GetAxis ("Mouse X") * turnSpeed;
@@ -56,6 +69,7 @@ public class CharacterOptions : MonoBehaviour
         //Jumping if on ground
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
+            this.GetComponent<Animator>().SetTrigger("Jump");
             rigid.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
         }
 

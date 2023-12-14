@@ -1,9 +1,29 @@
 fileFormatVersion: 2
-guid: 69297c3d795f5a34e80c02c8a20d47b7
+guid: ceac9cffcf3fb094085a9f055896c56d
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cone__0
+    second: {fileID: 2100000, guid: 7c242567a2c415843ac4a48e55faae80, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DefaultMaterial
+    second: {fileID: 2100000, guid: 2e61777f39ee18e4f905080328e201a7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Idol
+    second: {fileID: 2100000, guid: 6893044a8566730469def2b616effd0f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Walls
+    second: {fileID: 2100000, guid: a1d03c78738ee144d807459de7db4f8a, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
