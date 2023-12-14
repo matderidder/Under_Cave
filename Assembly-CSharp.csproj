@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\astar enemy\Grid.cs" />
     <Compile Include="Assets\Scripts\Character Move.cs" />
     <Compile Include="Assets\Scripts\astar enemy\Node.cs" />
+    <Compile Include="Assets\Scripts\astar enemy\wanderTarget.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -7,20 +7,17 @@ public class Unit : MonoBehaviour
 
 	//set the target and speed along with path use values
 	public Transform target;
-	public Transform wanderTarget;
 	float cSpeed = 5;
 	Vector3[] path;
 	int targetIndex;
 	bool chasing = false;
 	bool wandering = false;
-	public float wanderX;
-	public float wanderZ;
+	
     private Animator animator;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
-        PathRequestManager.RequestPath(transform.position, wanderTarget.position, OnPathFound);
     }
 
     //if pathfinder has a path start the movement along it, set values to start
@@ -54,6 +51,7 @@ public class Unit : MonoBehaviour
 			}
             this.GetComponent<Animator>().SetTrigger("Patrol");
             transform.position = Vector3.MoveTowards(transform.position, current, cSpeed * Time.deltaTime);
+			transform.rotation = Quaternion.LookRotation(target.position - transform.position);
 			wandering = false;
 			yield return null;
 
@@ -67,11 +65,6 @@ public class Unit : MonoBehaviour
             PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
 			chasing = true;
         }
-		if(other.tag == "Enemy")
-		{
-			other.gameObject.transform.position = new Vector3(UnityEngine.Random.Range(0, wanderX), 0, UnityEngine.Random.Range(0, wanderZ));
-            PathRequestManager.RequestPath(transform.position, other.gameObject.transform.position, OnPathFound);
-        }
 		
     }
 
@@ -79,7 +72,7 @@ public class Unit : MonoBehaviour
     {
         if(other.tag == "Player")
 		{
-            PathRequestManager.RequestPath(transform.position, wanderTarget.position, OnPathFound);
+            PathRequestManager.RequestPath(transform.position, transform.position, OnPathFound);
         }
 		chasing = false;
     }
