@@ -17,9 +17,18 @@ public class CharacterOptions : MonoBehaviour
     public Camera main;
     public GameObject target;
     public bool isblock;
-    public bool isattack;
     public GameObject weapon;
     private Animator animator;
+
+    //Attacking Vars
+    public float atkDist, atkSpeed, atkDelay, atkDmg;
+    public LayerMask atkLayer;
+    bool atkActive;
+
+    //Health System
+    int currHealth;
+    public int maxHealth;
+
 
     // Start is called before the first frame update
     void Start()
@@ -74,9 +83,10 @@ public class CharacterOptions : MonoBehaviour
         }
 
         //if click do attack, no anitmation right now just "Swing"
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButton(0))
         {
             //swing code go here want actual model and ani for this as would like to see where it swings can call reference to anoth code block
+            Attack();
         }
 
         //if held second mouse button block placeholder will put code in another block/script with actual weapon and code that
@@ -91,8 +101,41 @@ public class CharacterOptions : MonoBehaviour
             isblock = false;
             weapon.transform.eulerAngles = new Vector3(weapon.transform.eulerAngles.x, 0f, weapon.transform.eulerAngles.z);
         }
-        
     }
+
+    private void Attack() {
+
+        //Returns if the user cannot attack, or IS Attacking
+        if (atkActive)
+            return;
+        
+        atkActive = true;
+        Invoke(nameof(ResetAttack), atkSpeed); //Allows the user to attack again once their attack speed is back
+        Invoke(nameof(AttackRaycast), atkDelay); //Lets the hit go through a small delay after (mostly to line up with the animation)
+    }
+
+    private void ResetAttack() {
+        atkActive = false;
+    }
+
+    private void AttackRaycast() {
+    
+        if (Physics.Raycast(main.transform.position, main.transform.forward, out RaycastHit hit, atkDist, atkLayer)) {
+            //Hit animation, if any
+            if (hit.transform.TryGetComponent<EnemyBehavior>(out EnemyBehavior T)) { //ERROR LINE
+                T.TakeDamage(atkDmg); //TODO ON ENEMY
+            }
+        }
+    }
+
+    public void TakeDamage(float amount) {
+        currHealth -= amount;
+
+        if (currHealth <= 0f) {
+            //Define your death.
+        }
+    }
+
 
     private void OnCollisionEnter(Collision collision)
     {
